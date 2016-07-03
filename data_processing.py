@@ -24,7 +24,7 @@ class Filters:
     self.fs = 250                 # Sampling frequency
     self.fn = self.fs/2           # Nyquist frequency
 
-  def filters(self,eeg_data):
+  def filter_data(self,eeg_data):
     #FILTER CONSTANTS
     fs = self.fs
     fn = self.fn
