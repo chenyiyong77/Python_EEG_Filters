@@ -43,16 +43,16 @@ for i in range(len(eeg_data[0])):
   low_passed = signal.filtfilt(b,a,channel);                # low pass filter
   y = signal.filtfilt(bn,an,low_passed);        # notch filter
   filtered_eeg.append(y);
-plt.figure(1)
+# plt.figure(1)
 
-# for channel in filtered_eeg:
-#   plt.subplot(411)
-#   plt.plot(x,channel)
-#   plt.axis([x_low,x_high,y_low,y_high])
-spec1 = plt.subplot(211)
-print(filtered_eeg[0])
-print(filtered_eeg[1])
-plt.specgram(filtered_eeg[0],Fs=250)
-spec2 = plt.subplot(212)
-plt.specgram(filtered_eeg[1],Fs=250)
-plt.show()
+# # for channel in filtered_eeg:
+# #   plt.subplot(411)
+# #   plt.plot(x,channel)
+# #   plt.axis([x_low,x_high,y_low,y_high])
+# spec1 = plt.subplot(211)
+# print(filtered_eeg[0])
+# print(filtered_eeg[1])
+# plt.specgram(filtered_eeg[0],Fs=250)
+# spec2 = plt.subplot(212)
+# plt.specgram(filtered_eeg[1],Fs=250)
+# plt.show()

@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import random
 from mpl_toolkits.mplot3d import Axes3D
 
+def choose_filter(type='butterworth'):
+	
 
 eeg_data = np.genfromtxt('../Data/single.txt',delimiter=',',dtype='float32')[0:]
 print(np.shape(eeg_data))

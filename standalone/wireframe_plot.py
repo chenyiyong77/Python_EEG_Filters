@@ -5,12 +5,11 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 np.set_printoptions(threshold=np.inf)
-import simple_noise_filters
 
 
 ## Import Data from file
 eeg_data = np.genfromtxt('../Data/single.txt',delimiter=',',dtype='float32')[0:]
-eeg_data = eeg_data[:-10000]
+eeg_data = eeg_data[:-5000] #clip the end (too much noise)
 ## CONSTANTS
 MAX_AMP = 10    		# maximum amplitude to plot
 Fs = 256				# sampling rate
@@ -46,7 +45,7 @@ def clip(data):
 # Function generates the fft of each window along the graph and 
 #
 def generate_spectrum(eeg_data):
-	fft = np.empty(((len(eeg_data)//resolution),Fn+1),dtype='float32') 
+	fft = np.empty(((len(eeg_data)//resolution),Fnls+1),dtype='float32') 
 	for i in range(0,len(eeg_data)-window,resolution):
 		temp_window = eeg_data[i:i+256]
 		temp_fft = np.fft.fft(temp_window)
@@ -57,7 +56,6 @@ def generate_spectrum(eeg_data):
 	return fft
 
 # Plotting
-
 X,Y = np.meshgrid(x, y)
 Z = generate_spectrum(eeg_data)
 print(np.shape(X))
@@ -65,15 +63,15 @@ print(np.shape(Y))
 print(np.shape(Z))
 
 fig = plt.figure()
-ax = fig.add_subplot(211, projection='3d')               # 3d axes instance
+ax = fig.gca(projection='3d')               # 3d axes instance
 # ax.set_title('EEG Surface Plot')        # title
-surf = ax.plot_surface(X, Y, Z,             # data values (2D Arryas)
+surf = ax.plot_wireframe(X, Y, Z,             # data values (2D Arryas)
                        rstride=2,           # row step size
                        cstride=2,           # column step size
                        cmap=cm.viridis,        # color map
                        linewidth=1,
                        antialiased=True)
-ax.set_title('EEG Frequency Spectrum' )
+ax.set_title('EEG Spectrum' )
 ax.set_xlim(0,Fn)
 ax.set_ylim(0,len(Z))
 ax.set_zlim(0,MAX_AMP)        # title
@@ -81,30 +79,4 @@ ax.set_xlabel('Frequency (Hz)' )
 ax.set_ylabel( 'Time' )
 ax.set_zlabel( 'Amplitude (uV)' )
 # fig.colorbar(surf, shrink=0.5, aspect=5)     # colour bar
-
-
-########################################
-
-eeg_data = simple_noise_filters.filter_data(eeg_data,250)
-X,Y = np.meshgrid(x, y)
-Z = generate_spectrum(eeg_data)
-
-
-ax2 = fig.add_subplot(212, projection='3d')
-# ax2 = fig1.gca(projection='3d')               # 3d axes instance
-# ax.set_title('EEG Surface Plot')        # title
-surf = ax2.plot_surface(X, Y, Z,             # data values (2D Arryas)
-                       rstride=2,           # row step size
-                       cstride=2,           # column step size
-                       cmap=cm.viridis,        # color map
-                       linewidth=1,
-                       antialiased=True)
-ax2.set_title('Filtered EEG Frequency Spectrum' )
-ax2.set_xlim(0,Fn)
-ax2.set_ylim(0,len(Z))
-ax2.set_zlim(0,MAX_AMP)        # title
-ax2.set_xlabel('Frequency (Hz)' )
-ax2.set_ylabel( 'Time' )
-ax2.set_zlabel( 'Amplitude (uV)' )
-
 plt.show()
